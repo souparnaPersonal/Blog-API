@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import { TBlog } from './blog.interface';
 
 const blogSchema = new Schema<TBlog>({
@@ -7,3 +7,5 @@ const blogSchema = new Schema<TBlog>({
   title: { type: String, required: true },
   isPublished: { type: Boolean, default: true },
 });
+
+export const User = model<TBlog>('Blog', blogSchema);
