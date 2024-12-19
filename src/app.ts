@@ -1,13 +1,14 @@
 import express, { Application } from 'express';
 
 import cors from 'cors';
-import { UserRoutes } from './modules/User/user.routes';
+import { AuthRoutes } from './modules/Auth/auth.routes';
 
 const app: Application = express();
 
 app.use(express.json());
 app.use(cors());
-app.use('/api', UserRoutes);
+app.use('/api', AuthRoutes);
+
 app.get('/', (req, res) => {
   res.status(200).json({
     message: ' to  Api',
