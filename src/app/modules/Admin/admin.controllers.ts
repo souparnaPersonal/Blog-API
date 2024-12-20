@@ -1,12 +1,15 @@
+import { adminServices } from './admin.services';
 import { Request, Response } from 'express';
-import { authServices } from './auth.services';
-
-const createUser = async (req: Request, res: Response) => {
+const blockUser = async (req: Request, res: Response) => {
   try {
-    const result = await authServices.createUserIntoDb(req.body);
+    const token = req.headers.authorization;
+    const result = await adminServices.blockUserFromdb(
+      req.params.userId,
+      token as string,
+    );
 
     res.status(200).json({
-      message: 'Uaer created successfully',
+      message: 'User blocked successfully',
       status: true,
       data: result,
     });
@@ -20,12 +23,15 @@ const createUser = async (req: Request, res: Response) => {
     });
   }
 };
-const loginUser = async (req: Request, res: Response) => {
+const deleteBlog = async (req: Request, res: Response) => {
   try {
-    const result = await authServices.loginUser(req.body);
+    const result = await adminServices.deleteBlogFromDb(
+      req.params.id,
+      req.headers.authorization as string,
+    );
 
     res.status(200).json({
-      message: 'Login successful',
+      message: 'Blog deleted successfully',
       status: true,
       data: result,
     });
@@ -40,7 +46,7 @@ const loginUser = async (req: Request, res: Response) => {
   }
 };
 
-export const authController = {
-  createUser,
-  loginUser,
+export const adminControllers = {
+  blockUser,
+  deleteBlog,
 };

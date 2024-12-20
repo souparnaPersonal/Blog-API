@@ -17,7 +17,7 @@ const loginUser = async (payload: TLogin) => {
     throw new Error('user not found');
   }
   if (user.isBlocked) {
-    throw new Error('your are blocked');
+    throw new Error('you are blocked');
   }
 
   const passwordMatched = await bcrypt.compare(payload.password, user.password);
@@ -37,9 +37,17 @@ const loginUser = async (payload: TLogin) => {
       expiresIn: '1d',
     },
   );
+  const refreshToken = jwt.sign(
+    { ...jwtPayload },
+    config.jwt_refresh_token as string,
+    {
+      expiresIn: '3d',
+    },
+  );
 
   return {
     accessToken,
+    refreshToken,
   };
 };
 export const authServices = {

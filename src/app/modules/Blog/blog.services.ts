@@ -2,6 +2,8 @@ import config from '../../config';
 import { TBlog } from './blog.interface';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Blog } from './blog.model';
+import { User } from '../User/user.model';
+import { SortOrder } from 'mongoose';
 const createBlogIntoDb = async (blogContent: TBlog, token: string) => {
   if (!token) {
     throw new Error('Your are not authorized');
@@ -18,6 +20,7 @@ const createBlogIntoDb = async (blogContent: TBlog, token: string) => {
 
   console.log(decoded);
   const { userID, role, email } = decoded;
+
   blogContent.author = userID;
   const blog = await Blog.create(blogContent);
 
@@ -79,9 +82,10 @@ const getAllBlogsFromDb = async (queryParams: any) => {
 
   const filterQuery = filter ? { author: filter } : {};
 
-  const sortOptions = sortBy
+  const sortOptions: Record<string, SortOrder> = sortBy
     ? { [sortBy]: sortOrder === 'desc' ? -1 : 1 }
     : { createdAt: -1 };
+
   console.log('sortOptions', sortOptions);
   const result = await Blog.find({ ...searchQuery, ...filterQuery })
     .sort(sortOptions)

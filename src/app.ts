@@ -1,9 +1,9 @@
 import express, { Application } from 'express';
 
 import cors from 'cors';
-import { AuthRoutes } from './modules/Auth/auth.routes';
-import { BlogRoutes } from './modules/Blog/blog.routes';
-import { AdminRoutes } from './modules/Admin/admin.routes';
+import { AuthRoutes } from './app/modules/Auth/auth.routes';
+import { BlogRoutes } from './app/modules/Blog/blog.routes';
+import { AdminRoutes } from './app/modules/Admin/admin.routes';
 
 const app: Application = express();
 
