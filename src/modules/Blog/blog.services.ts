@@ -6,10 +6,17 @@ const createBlogIntoDb = async (blogContent: TBlog, token: string) => {
   if (!token) {
     throw new Error('Your are not authorized');
   }
+  let withoutBearer = '';
+  if (token.startsWith('Bearer ')) {
+    withoutBearer = token.split(' ')[1]; //
+  }
+
   const decoded = jwt.verify(
-    token,
+    withoutBearer,
     config.jwt_secrect_token as string,
   ) as JwtPayload;
+
+  console.log(decoded);
   const { userID, role, email } = decoded;
   blogContent.author = userID;
   const blog = await Blog.create(blogContent);
@@ -49,7 +56,11 @@ const updateBlog = async (
 const deleteAblogFromDb = async (id: string) => {
   const result = await Blog.deleteOne({ _id: id });
 
-  return result;
+  if (!result.acknowledged && result.deletedCount === 1) {
+    throw new Error('some thing went wrong');
+  }
+
+  return null;
 };
 
 const getAllBlogsFromDb = async (queryParams: any) => {

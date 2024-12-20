@@ -1,16 +1,19 @@
 import { model, Schema } from 'mongoose';
 import { TBlog } from './blog.interface';
 
-const blogSchema = new Schema<TBlog>(
-  {
-    author: { type: Schema.Types.ObjectId, ref: 'User' },
-    content: { type: String, required: true },
-    title: { type: String, required: true },
-    isPublished: { type: Boolean, default: true },
+const blogSchema = new Schema<TBlog>({
+  author: { type: Schema.Types.ObjectId, ref: 'User' },
+  content: { type: String, required: true },
+  title: { type: String, required: true },
+  isPublished: { type: Boolean, default: true },
+  createdAt: {
+    type: Date,
+    default: new Date(),
   },
-  {
-    timestamps: true,
+  updatedAt: {
+    type: Date,
+    default: new Date(),
   },
-);
+});
 
 export const Blog = model<TBlog>('Blog', blogSchema);
