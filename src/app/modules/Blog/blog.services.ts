@@ -28,22 +28,37 @@ const updateBlog = async (
   token: string,
 ) => {
   if (!token) {
-    throw new Error('Your are not authorized');
+    throw new Error('You are not authorized');
   }
 
   const decoded = verifyToken(token);
   const { userID, role, email } = decoded;
 
   if (!decoded) {
-    throw new Error('Your are not authorized');
+    throw new Error('You are not authorized');
   }
 
+  // Fetch the blog to verify its author
+  const blog = await Blog.findById(id);
+  console.log(blog);
+  if (!blog) {
+    throw new Error('Blog not found');
+  }
+
+  // Check if the user is the author of the blog
+  if (blog.author.toString() !== userID) {
+    throw new Error('You are not allowed to update which is not your');
+  }
+
+  // Proceed with the update
   const result = await Blog.findByIdAndUpdate(id, payload, {
     new: true,
   }).populate('author');
+
   if (!result) {
     throw new Error('Blog not found');
   }
+
   return result;
 };
 

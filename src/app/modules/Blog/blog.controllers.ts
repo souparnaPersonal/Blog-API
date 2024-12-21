@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { blogServices } from './blog.services';
 
-const createBlog = async (req: Request, res: Response) => {
+const createBlog = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await blogServices.createBlogIntoDb(
       req.body,
@@ -13,18 +13,12 @@ const createBlog = async (req: Request, res: Response) => {
       status: true,
       data: result,
     });
-  } catch (error: unknown) {
-    const errorMessage =
-      error instanceof Error ? error.message : 'An unexpected error occurred';
-    res.status(400).json({
-      message: 'Validation faild',
-      success: false,
-      error: errorMessage,
-    });
+  } catch (error) {
+    next(error);
   }
 };
 
-const updateBlog = async (req: Request, res: Response) => {
+const updateBlog = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = req.headers.authorization;
 
@@ -38,17 +32,11 @@ const updateBlog = async (req: Request, res: Response) => {
       status: true,
       data: result,
     });
-  } catch (error: unknown) {
-    const errorMessage =
-      error instanceof Error ? error.message : 'An unexpected error occurred';
-    res.status(400).json({
-      message: 'Validation faild',
-      success: false,
-      error: errorMessage,
-    });
+  } catch (error) {
+    next(error);
   }
 };
-const deleteBlog = async (req: Request, res: Response) => {
+const deleteBlog = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = req.params.id;
 
@@ -60,18 +48,12 @@ const deleteBlog = async (req: Request, res: Response) => {
       status: true,
       data: result,
     });
-  } catch (error: unknown) {
-    const errorMessage =
-      error instanceof Error ? error.message : 'An unexpected error occurred';
-    res.status(400).json({
-      message: 'Validation faild',
-      success: false,
-      error: errorMessage,
-    });
+  } catch (error) {
+    next(error);
   }
 };
 
-const getBlogs = async (req: Request, res: Response) => {
+const getBlogs = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await blogServices.getAllBlogsFromDb(req.query);
     res.status(200).json({
@@ -79,14 +61,8 @@ const getBlogs = async (req: Request, res: Response) => {
       status: true,
       data: result,
     });
-  } catch (error: unknown) {
-    const errorMessage =
-      error instanceof Error ? error.message : 'An unexpected error occurred';
-    res.status(400).json({
-      message: 'Validation faild',
-      success: false,
-      error: errorMessage,
-    });
+  } catch (error) {
+    next(error);
   }
 };
 
