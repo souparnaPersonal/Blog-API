@@ -27,7 +27,6 @@ const createBlog = async (req: Request, res: Response) => {
 const updateBlog = async (req: Request, res: Response) => {
   try {
     const token = req.headers.authorization;
-    console.log(req.body);
 
     const result = await blogServices.updateBlog(
       req.body,

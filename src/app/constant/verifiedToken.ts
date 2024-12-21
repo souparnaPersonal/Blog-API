@@ -11,7 +11,5 @@ export const verifyToken = (token: string) => {
     config.jwt_secrect_token as string,
   ) as JwtPayload;
 
-  console.log(decoded);
-
   return decoded;
 };

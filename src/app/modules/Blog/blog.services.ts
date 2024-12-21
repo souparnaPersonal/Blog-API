@@ -27,7 +27,6 @@ const updateBlog = async (
   id: string,
   token: string,
 ) => {
-  console.log(token);
   if (!token) {
     throw new Error('Your are not authorized');
   }
@@ -61,8 +60,6 @@ const deleteAblogFromDb = async (id: string) => {
 const getAllBlogsFromDb = async (queryParams: any) => {
   const { search, sortBy, sortOrder, filter } = queryParams;
 
-  console.log(queryParams);
-
   const searchQuery = search
     ? {
         $or: [
@@ -78,7 +75,6 @@ const getAllBlogsFromDb = async (queryParams: any) => {
     ? { [sortBy]: sortOrder === 'desc' ? -1 : 1 }
     : { createdAt: -1 };
 
-  console.log('sortOptions', sortOptions);
   const result = await Blog.find({ ...searchQuery, ...filterQuery })
     .sort(sortOptions)
     .populate('author');
