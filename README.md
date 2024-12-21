@@ -50,7 +50,7 @@ Ensure the following tools are installed on your system:
 
 ## How to Run the Application Locally
 
-Follow these steps to run the **BookShop API** locally:
+Follow these steps to run the **Blog API** locally:
 
 ### Step 1: Clone the Repository
 
