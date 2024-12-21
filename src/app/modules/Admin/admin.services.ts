@@ -13,6 +13,10 @@ const blockUserFromdb = async (userId: string, token: string) => {
     throw new Error('you are not admin !');
   }
 
+  const isBlockedBeingUpdatedUser = await User.findById(userId);
+  if (isBlockedBeingUpdatedUser?.isBlocked) {
+    throw new Error('Allready blocked');
+  }
   const result = await User.findByIdAndUpdate(
     { _id: userId },
     { isBlocked: true },
@@ -26,10 +30,9 @@ const deleteBlogFromDb = async (blogId: string, token: string) => {
     throw new Error('Your are not authorized');
   }
   const user = verifyToken(token);
-  console.log(user);
 
   if (user.role !== 'admin') {
-    throw new Error('you are not authrorized !');
+    throw new Error('you are not admin !');
   }
   const result = await Blog.deleteOne({ _id: blogId });
   return result;

@@ -1,24 +1,16 @@
-import config from '../../config';
 import { TBlog } from './blog.interface';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+
 import { Blog } from './blog.model';
-import { User } from '../User/user.model';
+
 import { SortOrder } from 'mongoose';
+import { verifyToken } from '../../constant/verifiedToken';
 const createBlogIntoDb = async (blogContent: TBlog, token: string) => {
   if (!token) {
     throw new Error('Your are not authorized');
   }
-  let withoutBearer = '';
-  if (token.startsWith('Bearer ')) {
-    withoutBearer = token.split(' ')[1]; //
-  }
 
-  const decoded = jwt.verify(
-    withoutBearer,
-    config.jwt_secrect_token as string,
-  ) as JwtPayload;
+  const decoded = verifyToken(token);
 
-  console.log(decoded);
   const { userID, role, email } = decoded;
 
   blogContent.author = userID;
@@ -35,14 +27,12 @@ const updateBlog = async (
   id: string,
   token: string,
 ) => {
+  console.log(token);
   if (!token) {
     throw new Error('Your are not authorized');
   }
 
-  const decoded = jwt.verify(
-    token,
-    config.jwt_secrect_token as string,
-  ) as JwtPayload;
+  const decoded = verifyToken(token);
   const { userID, role, email } = decoded;
 
   if (!decoded) {
@@ -52,7 +42,9 @@ const updateBlog = async (
   const result = await Blog.findByIdAndUpdate(id, payload, {
     new: true,
   }).populate('author');
-
+  if (!result) {
+    throw new Error('Blog not found');
+  }
   return result;
 };
 

@@ -1,9 +1,9 @@
 import config from '../../config';
+import { createToken } from '../../constant/createToken';
 import { TUser } from '../User/user.interface';
 import { User } from '../User/user.model';
 import { TLogin } from './auth.interface';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 
 const createUserIntoDb = async (payload: Partial<TUser>) => {
   const result = await User.create(payload);
@@ -30,24 +30,20 @@ const loginUser = async (payload: TLogin) => {
     email: user.email,
     role: user.role,
   };
-  const accessToken = jwt.sign(
-    { ...jwtPayload },
+  const accessToken = createToken(
+    jwtPayload,
     config.jwt_secrect_token as string,
-    {
-      expiresIn: '1d',
-    },
   );
-  const refreshToken = jwt.sign(
-    { ...jwtPayload },
+
+  console.log(accessToken);
+  const refreshToken = createToken(
+    jwtPayload,
     config.jwt_refresh_token as string,
-    {
-      expiresIn: '3d',
-    },
   );
 
   return {
     accessToken,
-    refreshToken,
+    // refreshToken,
   };
 };
 export const authServices = {

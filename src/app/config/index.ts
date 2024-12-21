@@ -8,4 +8,5 @@ export default {
   database_url: process.env.DATABASE_URL,
   jwt_secrect_token: process.env.JWT_SECRET,
   jwt_refresh_token: process.env.JWT_REFRESH,
+  node_dev: process.env.NODE_ENV,
 };

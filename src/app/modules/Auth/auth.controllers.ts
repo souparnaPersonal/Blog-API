@@ -23,15 +23,17 @@ const createUser = async (req: Request, res: Response) => {
 const loginUser = async (req: Request, res: Response) => {
   try {
     const result = await authServices.loginUser(req.body);
-    const { refreshToken, accessToken } = result;
-    res.cookie('refreshToken', refreshToken, {
-      secure: false,
-      httpOnly: true,
-    });
+    const { accessToken } = result;
+    // res.cookie('refreshToken', refreshToken, {
+    //   secure: false,
+    //   httpOnly: true,
+    // });
     res.status(200).json({
       message: 'Login successful',
       status: true,
-      data: accessToken,
+      data: {
+        accessToken,
+      },
     });
   } catch (error: unknown) {
     const errorMessage =

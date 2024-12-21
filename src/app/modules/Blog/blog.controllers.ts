@@ -27,6 +27,7 @@ const createBlog = async (req: Request, res: Response) => {
 const updateBlog = async (req: Request, res: Response) => {
   try {
     const token = req.headers.authorization;
+    console.log(req.body);
 
     const result = await blogServices.updateBlog(
       req.body,
@@ -34,7 +35,7 @@ const updateBlog = async (req: Request, res: Response) => {
       token as string,
     );
     res.status(200).json({
-      message: 'blog created successfully',
+      message: 'blog updated successfully',
       status: true,
       data: result,
     });

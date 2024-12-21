@@ -9,7 +9,7 @@ const userSchema = new Schema<TUser>(
     password: { type: String, required: true },
     isBlocked: { type: Boolean, default: false },
     email: { type: String, required: true, unique: true },
-    role: { type: String, default: 'user' },
+    role: { type: String, enum: ['admin', 'user'], default: 'user' },
   },
   {
     timestamps: true,
