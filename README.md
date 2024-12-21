@@ -7,6 +7,11 @@ Also have authentication with jwt here user can login and also register
 
 ### Video Explanation : https://drive.google.com/file/d/1ONZ2CBcHWTs0jB7UkAEQMfz_BXY61uis/view?usp=sharing
 
+## Admin
+
+"password": "securePassword123",
+"email": "admin@gmail.com"
+
 ## Features
 
 ## User Roles and Permissions
