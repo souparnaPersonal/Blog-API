@@ -1,17 +1,7 @@
-import { verifyToken } from '../../constant/verifiedToken';
 import { Blog } from '../Blog/blog.model';
 import { User } from '../User/user.model';
 
 const blockUserFromdb = async (userId: string, token: string) => {
-  if (!token) {
-    throw new Error('Your are not authorized');
-  }
-  const user = verifyToken(token);
-
-  if (user.role !== 'admin') {
-    throw new Error('you are not admin !');
-  }
-
   const isBlockedBeingUpdatedUser = await User.findById(userId);
   if (isBlockedBeingUpdatedUser?.isBlocked) {
     throw new Error('Allready blocked');

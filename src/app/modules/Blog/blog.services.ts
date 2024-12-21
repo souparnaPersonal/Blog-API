@@ -4,6 +4,8 @@ import { Blog } from './blog.model';
 
 import { SortOrder } from 'mongoose';
 import { verifyToken } from '../../constant/verifiedToken';
+import { TUser } from '../User/user.interface';
+import { JwtPayload } from 'jsonwebtoken';
 const createBlogIntoDb = async (blogContent: TBlog, token: string) => {
   if (!token) {
     throw new Error('Your are not authorized');
@@ -62,14 +64,27 @@ const updateBlog = async (
   return result;
 };
 
-const deleteAblogFromDb = async (id: string) => {
-  const result = await Blog.deleteOne({ _id: id });
+const deleteAblogFromDb = async (id: string, user: JwtPayload) => {
+  const blog = await Blog.findById(id);
 
-  if (!result.acknowledged && result.deletedCount === 1) {
-    throw new Error('some thing went wrong');
+  if (!blog) {
+    throw new Error('Blog not found');
   }
 
-  return null;
+  // Check if the logged-in user is the author of the blog
+  if (blog.author.toString() !== user.userID) {
+    throw new Error('This is not your blog');
+  }
+
+  // Proceed with deleting the blog if the user is the author
+  const result = await Blog.deleteOne({ _id: id });
+
+  // If the deletion was not acknowledged, throw an error
+  if (!result.acknowledged || result.deletedCount !== 1) {
+    throw new Error('Something went wrong while deleting the blog');
+  }
+
+  return null; // Return null to ind
 };
 
 const getAllBlogsFromDb = async (queryParams: any) => {
@@ -93,7 +108,9 @@ const getAllBlogsFromDb = async (queryParams: any) => {
   const result = await Blog.find({ ...searchQuery, ...filterQuery })
     .sort(sortOptions)
     .populate('author');
-
+  // if (result.length) {
+  //   throw new Error('no data found');
+  // }
   return result;
 };
 export const blogServices = {

@@ -40,8 +40,12 @@ const deleteBlog = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = req.params.id;
 
+    const user = req.user;
+    console.log(user);
+
     const result = await blogServices.deleteAblogFromDb(
       id as unknown as string,
+      user,
     );
     res.status(200).json({
       message: 'blog deleted successfully',
