@@ -30,18 +30,10 @@ const loginUser = async (payload: TLogin) => {
     email: user.email,
     role: user.role,
   };
-  const accessToken = createToken(
-    jwtPayload,
-    config.jwt_secrect_token as string,
-  );
-
-  const refreshToken = createToken(
-    jwtPayload,
-    config.jwt_refresh_token as string,
-  );
+  const token = createToken(jwtPayload, config.jwt_secrect_token as string);
 
   return {
-    accessToken,
+    token,
     // refreshToken,
   };
 };

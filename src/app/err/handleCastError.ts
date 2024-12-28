@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
-import { TErrorSources, TGenericErrorResponse } from '../interface/error';
+import { Terror, TGenericErrorResponse } from '../interface/error';
 
 const handleCastError = (
   err: mongoose.Error.CastError,
 ): TGenericErrorResponse => {
-  const errorSources: TErrorSources = [
+  const error: Terror = [
     {
       path: err?.path,
       message: err?.message,
@@ -13,7 +13,7 @@ const handleCastError = (
   const statusCode = 400;
   return {
     statusCode,
-    errorSources,
+    error,
     message: 'Invalid id',
   };
 };

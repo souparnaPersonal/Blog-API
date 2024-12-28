@@ -1,8 +1,8 @@
 import { ZodError, ZodIssue } from 'zod';
-import { TErrorSources, TGenericErrorResponse } from '../interface/error';
+import { Terror, TGenericErrorResponse } from '../interface/error';
 
 const handdleZoderror = (err: ZodError): TGenericErrorResponse => {
-  const errorSources: TErrorSources = err.issues.map((issues: ZodIssue) => {
+  const error: Terror = err.issues.map((issues: ZodIssue) => {
     return {
       path: issues.path[issues.path.length - 1],
       message: issues.message,
@@ -14,7 +14,7 @@ const handdleZoderror = (err: ZodError): TGenericErrorResponse => {
   return {
     statusCode,
     message: 'zod vallidation error',
-    errorSources,
+    error,
   };
 };
 
