@@ -1,24 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TBlog } from './blog.interface';
 
 import { Blog } from './blog.model';
 
 import { SortOrder } from 'mongoose';
 import { verifyToken } from '../../constant/verifiedToken';
-import { TUser } from '../User/user.interface';
 import { JwtPayload } from 'jsonwebtoken';
-const createBlogIntoDb = async (blogContent: TBlog, token: string) => {
-  if (!token) {
-    throw new Error('Your are not authorized');
-  }
-
-  const decoded = verifyToken(token);
-
-  const { userID, role, email } = decoded;
-
-  blogContent.author = userID;
+const createBlogIntoDb = async (user: JwtPayload, blogContent: TBlog) => {
+  blogContent.author = user.userID;
   const blog = await Blog.create(blogContent);
 
-  const result = await Blog.findById(blog._id).populate('author');
+  const result = await Blog.findById(blog._id)
+    .populate('author')
+    .select('title content _id author');
   return {
     result,
   };
@@ -34,7 +28,7 @@ const updateBlog = async (
   }
 
   const decoded = verifyToken(token);
-  const { userID, role, email } = decoded;
+  const { userID } = decoded;
 
   if (!decoded) {
     throw new Error('You are not authorized');
@@ -42,7 +36,7 @@ const updateBlog = async (
 
   // Fetch the blog to verify its author
   const blog = await Blog.findById(id);
-  console.log(blog);
+
   if (!blog) {
     throw new Error('Blog not found');
   }
@@ -55,7 +49,9 @@ const updateBlog = async (
   // Proceed with the update
   const result = await Blog.findByIdAndUpdate(id, payload, {
     new: true,
-  }).populate('author');
+  })
+    .populate('author')
+    .select('title content _id author');
 
   if (!result) {
     throw new Error('Blog not found');
@@ -107,10 +103,9 @@ const getAllBlogsFromDb = async (queryParams: any) => {
 
   const result = await Blog.find({ ...searchQuery, ...filterQuery })
     .sort(sortOptions)
-    .populate('author');
-  // if (result.length) {
-  //   throw new Error('no data found');
-  // }
+    .populate('author')
+    .select('title content _id author');
+
   return result;
 };
 export const blogServices = {

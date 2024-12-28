@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Terror, TGenericErrorResponse } from '../interface/error';
 
 const handleDublicateError = (err: any): TGenericErrorResponse => {
@@ -13,11 +14,13 @@ const handleDublicateError = (err: any): TGenericErrorResponse => {
       message: `${extractedMessage} is already exists`,
     },
   ];
+
   const statusCode = 400;
+
   return {
     statusCode,
     error,
-    message: '',
+    message: err?.message,
   };
 };
 

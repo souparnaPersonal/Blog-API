@@ -1,7 +1,7 @@
 import { Blog } from '../Blog/blog.model';
 import { User } from '../User/user.model';
 
-const blockUserFromdb = async (userId: string, token: string) => {
+const blockUserFromdb = async (userId: string) => {
   const isBlockedBeingUpdatedUser = await User.findById(userId);
   if (isBlockedBeingUpdatedUser?.isBlocked) {
     throw new Error('Allready blocked');
@@ -17,7 +17,7 @@ const blockUserFromdb = async (userId: string, token: string) => {
   return result;
 };
 
-const deleteBlogFromDb = async (blogId: string, token: string) => {
+const deleteBlogFromDb = async (blogId: string) => {
   const result = await Blog.deleteOne({ _id: blogId });
   return result;
 };

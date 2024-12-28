@@ -34,7 +34,6 @@ const loginUser = async (payload: TLogin) => {
 
   return {
     token,
-    // refreshToken,
   };
 };
 export const authServices = {

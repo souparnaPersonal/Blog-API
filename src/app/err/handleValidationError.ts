@@ -16,7 +16,7 @@ const handleValidationError = (
 
   return {
     statusCode,
-    message: 'zod vallidation error',
+    message: 'vallidation error',
     error,
   };
 };

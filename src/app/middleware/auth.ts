@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import { JwtPayload } from 'jsonwebtoken';
 
 import catchAsync from '../utils/catchAsync';
 import { TUserRole } from '../modules/User/user.interface';
@@ -20,14 +20,10 @@ const auth = (...requiredRoles: TUserRole[]) => {
     // checking if the given token is valid
     const decoded = verifyToken(token);
 
-    console.log(decoded);
-
-    const { role, userId, iat, email } = decoded;
+    const { role, email } = decoded;
 
     // checking if the user is exist
     const user = await User.findOne({ email: email });
-
-    console.log(user);
 
     if (!user) {
       throw new Apperror(httpStatus.NOT_FOUND, 'This user is not found !!');

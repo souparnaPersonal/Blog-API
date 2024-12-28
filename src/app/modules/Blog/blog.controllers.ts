@@ -2,15 +2,14 @@ import { NextFunction, Request, Response } from 'express';
 import { blogServices } from './blog.services';
 
 const createBlog = async (req: Request, res: Response, next: NextFunction) => {
+  console.log(req.user);
   try {
-    const result = await blogServices.createBlogIntoDb(
-      req.body,
-      req.headers.authorization as string,
-    );
+    const result = await blogServices.createBlogIntoDb(req.user, req.body);
 
-    res.status(200).json({
-      message: 'blog created successfully',
-      status: true,
+    res.status(201).json({
+      success: true,
+      message: 'Blog created successfully',
+      statusCode: 201,
       data: result,
     });
   } catch (error) {
@@ -28,8 +27,9 @@ const updateBlog = async (req: Request, res: Response, next: NextFunction) => {
       token as string,
     );
     res.status(200).json({
-      message: 'blog updated successfully',
-      status: true,
+      success: true,
+      message: 'Blog updated successfully',
+      statusCode: 200,
       data: result,
     });
   } catch (error) {
@@ -41,16 +41,12 @@ const deleteBlog = async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
 
     const user = req.user;
-    console.log(user);
 
-    const result = await blogServices.deleteAblogFromDb(
-      id as unknown as string,
-      user,
-    );
+    await blogServices.deleteAblogFromDb(id as unknown as string, user);
     res.status(200).json({
-      message: 'blog deleted successfully',
-      status: true,
-      data: result,
+      success: true,
+      message: 'Blog deleted successfully',
+      statusCode: 200,
     });
   } catch (error) {
     next(error);
@@ -61,8 +57,9 @@ const getBlogs = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await blogServices.getAllBlogsFromDb(req.query);
     res.status(200).json({
+      success: true,
       message: 'Blogs fetched successfully',
-      status: true,
+      statusCode: 200,
       data: result,
     });
   } catch (error) {

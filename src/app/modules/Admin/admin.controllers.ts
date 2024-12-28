@@ -2,16 +2,12 @@ import { adminServices } from './admin.services';
 import { NextFunction, Request, Response } from 'express';
 const blockUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.headers.authorization;
-    const result = await adminServices.blockUserFromdb(
-      req.params.userId,
-      token as string,
-    );
+    await adminServices.blockUserFromdb(req.params.userId);
 
     res.status(200).json({
+      success: true,
       message: 'User blocked successfully',
-      status: true,
-      data: result,
+      statusCode: 200,
     });
   } catch (error) {
     next(error);
@@ -19,15 +15,12 @@ const blockUser = async (req: Request, res: Response, next: NextFunction) => {
 };
 const deleteBlog = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const result = await adminServices.deleteBlogFromDb(
-      req.params.id,
-      req.headers.authorization as string,
-    );
+    await adminServices.deleteBlogFromDb(req.params.id);
 
     res.status(200).json({
+      success: true,
       message: 'Blog deleted successfully',
-      status: true,
-      data: result,
+      statusCode: 200,
     });
   } catch (error) {
     next(error);

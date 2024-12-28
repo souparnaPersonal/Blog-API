@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from 'express';
 import { authServices } from './auth.services';
+import httpStatus from 'http-status';
 
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -9,17 +10,12 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
     res.status(200).json({
       success: true,
       message: 'User registered successfully',
-      statusCode: 201,
+      statusCode: httpStatus[201],
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: 'Validation error',
-      statusCode: 400,
-      error: { ...error },
-      stack: 'error stack',
-    });
+    console.log('controller', error.code);
+    next(error);
   }
 };
 const loginUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -36,13 +32,7 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
       },
     });
   } catch (error: any) {
-    res.status(401).json({
-      success: false,
-      message: 'Invalid credentials',
-      statusCode: 401,
-      error: { ...error },
-      stack: error?.stack,
-    });
+    next(error);
   }
 };
 

@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+ 
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -22,7 +22,7 @@ const globalErrorHandler: any = (
   // settings default pattern
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Something went wrong!';
-
+  console.log('from global', err);
   let error: Terror = [
     {
       path: '',
@@ -42,13 +42,15 @@ const globalErrorHandler: any = (
     error = simplifiedError?.error;
   } else if (err?.name === 'CastError') {
     const simplifiedError = handleCastError(err);
+    console.log(simplifiedError);
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
     error = simplifiedError?.error;
   } else if (err?.code === 11000) {
     const simplifiedError = handleDublicateError(err);
+    console.log('res', simplifiedError);
     statusCode = simplifiedError?.statusCode;
-    message = simplifiedError?.message;
+    message = simplifiedError?.error;
     error = simplifiedError?.error;
   } else if (err instanceof Apperror) {
     statusCode = err?.statusCode;
@@ -71,8 +73,10 @@ const globalErrorHandler: any = (
   return res.status(statusCode).json({
     success: false,
     message,
-    error,
-    err,
+    statusCode,
+    error: {
+      details: err,
+    },
     stack: config.node_dev === 'development' ? err?.stack : null,
   });
 };
