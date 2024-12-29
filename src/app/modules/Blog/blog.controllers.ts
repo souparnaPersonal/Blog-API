@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import { blogServices } from './blog.services';
 
 const createBlog = async (req: Request, res: Response, next: NextFunction) => {
-  console.log(req.user);
   try {
     const result = await blogServices.createBlogIntoDb(req.user, req.body);
 

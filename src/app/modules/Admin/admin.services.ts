@@ -19,6 +19,10 @@ const blockUserFromdb = async (userId: string) => {
 
 const deleteBlogFromDb = async (blogId: string) => {
   const result = await Blog.deleteOne({ _id: blogId });
+  console.log(result);
+  if (result.deletedCount === 0) {
+    throw new Error('blog not found');
+  }
   return result;
 };
 

@@ -61,6 +61,7 @@ const updateBlog = async (
 };
 
 const deleteAblogFromDb = async (id: string, user: JwtPayload) => {
+  console.log(id);
   const blog = await Blog.findById(id);
 
   if (!blog) {
