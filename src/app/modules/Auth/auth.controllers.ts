@@ -7,14 +7,13 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await authServices.createUserIntoDb(req.body);
 
-    res.status(200).json({
+    res.status(201).json({
       success: true,
       message: 'User registered successfully',
-      statusCode: httpStatus[201],
+      statusCode: 201,
       data: result,
     });
   } catch (error: any) {
-    console.log('controller', error.code);
     next(error);
   }
 };

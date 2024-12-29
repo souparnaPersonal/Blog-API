@@ -7,7 +7,13 @@ import bcrypt from 'bcrypt';
 
 const createUserIntoDb = async (payload: Partial<TUser>) => {
   const result = await User.create(payload);
-  return result;
+  const dataTosend = {
+    email: result.email,
+    name: result.name,
+    _id: result._id,
+  };
+
+  return dataTosend;
 };
 
 const loginUser = async (payload: TLogin) => {
